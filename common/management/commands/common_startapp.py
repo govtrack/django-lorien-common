@@ -6,7 +6,7 @@ import shutil
 from django.core.management.base import BaseCommand, CommandError
 
 COMMON_ROOT = dirname(dirname(dirname(realpath(__file__))))
-SKELETON_PATH = os.path.join(COMMON_ROOT, 'data', 'app.template')
+SKELETON_PATH = os.path.join(COMMON_ROOT, 'data', 'app_template')
 
 class Command(BaseCommand):
     help = 'Create django application skeleton'
