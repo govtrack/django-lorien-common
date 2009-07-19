@@ -1,0 +1,41 @@
+=========================
+Django common application
+=========================
+
+Django-common provides useful shortcuts for developing django projects.
+
+
+Overview
+========
+
+context_processors
+~~~~~~~~~~~~~~~~~~
+
+* settings_processor - put django.conf.settings into RequestContext
+
+decorators
+~~~~~~~~~~
+
+* render_to - classic render_to functionality
+* paged - paginate the `response_qs` variable in response. Used with render_to.
+* ajax - wrap view reponse into JSON
+
+fields
+~~~~~~
+
+* AutoOneToOneField - OneToOne field which automatically creates related object
+
+forms
+~~~~~
+
+* build_form - shortcut for creating GET/POST form with one line of code
+
+http
+~~~~
+
+* HttpResponseJson - Response class which wraps data into JSON format. Used in common.decorators.ajax
+
+middleware
+~~~~~~~~~~
+
+* LoginRequiredMiddleware - restrict guest access
