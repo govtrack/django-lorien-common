@@ -26,8 +26,8 @@ for dirpath, dirnames, filenames in os.walk(PACKAGE):
             data_files.append(os.path.join(prefix, f))
 
 setup(
-    version = '0.1.0',
-    description = 'Shortcuts for developing django projects',
+    version = '0.1.1',
+    description = 'Shortcuts helping to develop django sites',
     author = 'Grigoriy Petukhov',
     author_email = 'lorien@lorien.name',
     url = 'http://bitbucket.org/lorien/common/',
