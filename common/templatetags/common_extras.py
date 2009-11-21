@@ -1,11 +1,37 @@
 # -*- coding: utf-8
+from cgi import parse_qsl
+from urllib import urlencode
+
 from django import template
-from django.template import RequestContext
-from django.utils.encoding import smart_unicode
-from django.db import settings
+from django.utils.encoding import smart_str
+
 
 register = template.Library()
 
+@register.simple_tag
+def alter_qs(qs, name, value, name2=None, value2=None):
+    """
+    Alter query string argument with new value.
+    """
+
+    qs = qs.lstrip('?')
+    args = dict((x[0], smart_str(x[1])) for x in parse_qsl(qs))
+    if value:
+        args[name] = smart_str(value)
+    else:
+        if name in args:
+            del args[name]
+    if args:
+        result = '?' + urlencode(args)
+        if name2 and value2:
+            return alter_qs(result, name2, value2)
+        else:
+            return result
+    else:
+        return ''
+
+
+# TODO: refactor this code, move it to common.pagination module
 # TODO: this old code requires refactoring
 @register.inclusion_tag('common/pagination.html',takes_context=True)
 def pagination(context, adjacent_pages=5):
@@ -50,17 +76,3 @@ def pagination(context, adjacent_pages=5):
         'page_list': page_list,
         'per_page': context['per_page'],
         }
-
-
-@register.inclusion_tag('common/link.html')
-def link(object, anchor=u''):
-    """
-    Return A tag with link to object.
-    """
-
-    user_id = None
-    url = hasattr(object,'get_absolute_url') and object.get_absolute_url() or ''
-    anchor = anchor or smart_unicode(object)
-    return {'user_id': user_id,
-            'url': url,
-            'anchor': anchor}
