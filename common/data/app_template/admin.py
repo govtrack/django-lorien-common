@@ -3,7 +3,7 @@
 from django.contrib import admin
 #from .models import
 
-class XAdmin(admin.ModelAdmin):
+class Admin(admin.ModelAdmin):
     list_display = ['']
 
 

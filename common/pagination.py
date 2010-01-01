@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
-from common.templatetags.common_extras import alter_qs
+from common.templatetags.common_tags import alter_qs
+
 
 def paginate(qs, request, per_page=15):
     try:    
