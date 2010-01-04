@@ -27,7 +27,7 @@ for dirpath, dirnames, filenames in os.walk(PACKAGE):
 
 setup(
     version = '0.1.3',
-    description = 'A number of useful django shortcuts and helpers.'
+    description = 'A number of useful django shortcuts and helpers',
     author = 'Grigoriy Petukhov',
     author_email = 'lorien@lorien.name',
     url = 'http://bitbucket.org/lorien/common/',
