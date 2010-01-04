@@ -20,7 +20,7 @@ def render_to(template):
             if not isinstance(output, dict):
                 return output
             else:
-                ctx = RequestContext(reqeust)
+                ctx = RequestContext(request)
                 return render_to_response(template, output, context_instance=ctx)
         return wrapper
     return decorator
