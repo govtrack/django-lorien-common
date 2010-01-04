@@ -8,8 +8,10 @@ from common.http import HttpResponseJson
 
 def render_to(template):
     """
-    Expects the dict from view. Render returned dict with
-    RequestContext.
+    Shortcut for rendering template with RequestContext.
+
+    If decorated function returns non dict then just return that result
+    else use RequestContext for rendering the template.
     """
 
     def decorator(func):
