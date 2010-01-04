@@ -26,8 +26,8 @@ for dirpath, dirnames, filenames in os.walk(PACKAGE):
             data_files.append(os.path.join(prefix, f))
 
 setup(
-    version = '0.1.2',
-    description = 'Shortcuts helping to develop django sites',
+    version = '0.1.3',
+    description = 'A number of useful django shortcuts and helpers.'
     author = 'Grigoriy Petukhov',
     author_email = 'lorien@lorien.name',
     url = 'http://bitbucket.org/lorien/common/',
@@ -37,7 +37,7 @@ setup(
     package_data = {'common': data_files},
 
     license = "BSD",
-    keywords = "django application development shortcuts",
+    keywords = "django application development shortcuts helpers",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
