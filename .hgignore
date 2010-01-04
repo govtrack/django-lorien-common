@@ -3,3 +3,4 @@ syntax: glob
 *.swp
 *.egg-info/
 dist/
+update_pypi.sh
