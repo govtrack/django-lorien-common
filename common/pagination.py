@@ -17,12 +17,12 @@ def paginate(qs, request, per_page=15):
         page = paginator.page(1)
     query_string = request.META['QUERY_STRING']
 
-    if page.has_previous:
+    if page.has_previous():
         page.previous_page_url = alter_qs(query_string, 'page', page.previous_page_number())
     else:
         page.previous_page_url = None
 
-    if page.has_next:
+    if page.has_next():
         page.next_page_url = alter_qs(query_string, 'page', page.next_page_number())
     else:
         page.next_page_url = None
