@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import simplejson
-
+from django.utils import simplejson
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
