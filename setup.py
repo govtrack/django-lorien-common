@@ -26,11 +26,11 @@ for dirpath, dirnames, filenames in os.walk(PACKAGE):
             data_files.append(os.path.join(prefix, f))
 
 setup(
-    version = '0.1.9',
+    version = '0.1.10',
     description = 'A number of useful django shortcuts and helpers',
     author = 'Grigoriy Petukhov',
     author_email = 'lorien@lorien.name',
-    url = 'http://bitbucket.org/lorien/common/',
+    url = 'http://bitbucket.org/lorien/django-common/',
     name = 'django-common',
 
     packages = packages,
