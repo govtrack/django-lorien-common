@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from common.templatetags.common_tags import alter_qs
 
 
-def paginate(qs, request, per_page=15):
+def paginate(qs, request, per_page=15, frame_size=None):
     try:    
         page_number = int(request.GET.get('page', 1))
     except ValueError:
@@ -27,8 +27,23 @@ def paginate(qs, request, per_page=15):
     else:
         page.next_page_url = None
 
-    page.paginator.page_range_urls = []
-    for x in page.paginator.page_range:
-        page.paginator.page_range_urls.append((x, alter_qs(query_string, 'page', x)))
+    page.first_page_url = alter_qs(query_string, 'page', 1)
+    page.last_page_url = alter_qs(query_string, 'page', page.paginator.num_pages)
+
+    urls = []
+    if frame_size is None:
+        for x in page.paginator.page_range:
+            urls.append((x, alter_qs(query_string, 'page', x)))
+    else:
+        half = int(frame_size / 2.0)
+        start = max(1, page.number - int(frame_size / 2.0))
+        stop = min(page.paginator.num_pages, page.number + (frame_size - half))
+        if start > 1:
+            urls.append((None, None))
+        for x in xrange(start, stop):
+            urls.append((x, alter_qs(query_string, 'page', x)))
+        if stop < page.paginator.num_pages:
+            urls.append((None, None))
+    page.paginator.page_range_urls = urls
 
     return page
