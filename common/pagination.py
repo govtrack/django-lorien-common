@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from common.templatetags.common_tags import alter_qs
 
 
-def paginate(qs, request, per_page=15, frame_size=None):
+def paginate(qs, request, per_page=15, frame_size=10):
     try:    
         page_number = int(request.GET.get('page', 1))
     except ValueError:
