@@ -40,7 +40,7 @@ def paginate(qs, request, per_page=15, frame_size=10):
         stop = min(page.paginator.num_pages, page.number + (frame_size - half))
         if start > 1:
             urls.append((None, None))
-        for x in xrange(start, stop):
+        for x in xrange(start, stop + 1):
             urls.append((x, alter_qs(query_string, 'page', x)))
         if stop < page.paginator.num_pages:
             urls.append((None, None))
