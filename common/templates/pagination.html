@@ -1,9 +1,10 @@
+{% load i18n %}
 <div class="pagination">
 
     {% if page.has_previous %}
-    <a href="{{ page.previous_page_url }}">&laquo; previous</a>
+    <a href="{{ page.previous_page_url }}">&laquo; {% trans "previous" %}</a>
     {% else %}
-    <span class="control">&laquo; previous</span>
+    <span class="control">&laquo; {% trans "previous" %}</span>
     {% endif %}
 
     {% if page.paginator.frame_start_page > 1 %}
@@ -27,9 +28,9 @@
     {% endif %}
 
     {% if page.has_next %}
-    <a href="{{ page.next_page_url }}">next &raquo;</a>
+    <a href="{{ page.next_page_url }}">{% trans "next" %} &raquo;</a>
     {% else %}
-    <span class="control">next &raquo;</span>
+    <span class="control">{% trans "next" %} &raquo;</span>
     {% endif %}
 
     <div class="clear"></div>
