@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from common.templatetags.common_tags import alter_qs
 
 
-def paginate(qs, request, per_page=15, frame_size=10):
+def paginate(qs, request, per_page=15, frame_size=5):
     try:    
         page_number = int(request.GET.get('page', 1))
     except ValueError:
@@ -34,16 +34,22 @@ def paginate(qs, request, per_page=15, frame_size=10):
     if frame_size is None:
         for x in page.paginator.page_range:
             urls.append((x, alter_qs(query_string, 'page', x)))
+        start = 1
+        end = page.paginator.page_range
     else:
         half = int(frame_size / 2.0)
         start = max(1, page.number - int(frame_size / 2.0))
-        stop = min(page.paginator.num_pages, page.number + (frame_size - half))
-        if start > 1:
-            urls.append((None, None))
+        stop = min(page.paginator.num_pages, start + frame_size - 1)
+        if stop == page.paginator.num_pages:
+            if stop - start < (frame_size - 1):
+                start = max(1, stop - frame_size)
+        if start == 1:
+            if stop - start < (frame_size - 1):
+                stop = min(page.paginator.num_pages, start + frame_size)
         for x in xrange(start, stop + 1):
             urls.append((x, alter_qs(query_string, 'page', x)))
-        if stop < page.paginator.num_pages:
-            urls.append((None, None))
-    page.paginator.page_range_urls = urls
+    page.paginator.frame = urls
+    page.paginator.frame_start_page = start
+    page.paginator.frame_end_page = stop
 
     return page

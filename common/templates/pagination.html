@@ -1,0 +1,37 @@
+<div class="pagination">
+
+    {% if page.has_previous %}
+    <a href="{{ page.previous_page_url }}">&laquo; previous</a>
+    {% else %}
+    <span class="control">&laquo; previous</span>
+    {% endif %}
+
+    {% if page.paginator.frame_start_page > 1 %}
+    <a href="{{ page.first_page_url }}">1</a>
+        {% if page.paginator.frame_start_page > 2 %}
+        <span class="control">...</span>
+        {% endif %}
+    {% endif %}
+
+    {% for number, url in page.paginator.frame %}
+    {% if not url %}..{% else %}
+    <a {% ifequal page.number number%}class="active"{% endifequal %} href="{{ url }}">{{ number }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if page.paginator.frame_end_page != page.paginator.num_pages %}
+        {% if page.paginator.frame_end_page != page.paginator.num_pages|add:"-1" %}
+        <span class="control">...</span>
+        {% endif %}
+    <a href="{{ page.last_page_url }}">{{ page.paginator.num_pages }}</a>
+    {% endif %}
+
+    {% if page.has_next %}
+    <a href="{{ page.next_page_url }}">next &raquo;</a>
+    {% else %}
+    <span class="control">next &raquo;</span>
+    {% endif %}
+
+    <div class="clear"></div>
+
+</div>
