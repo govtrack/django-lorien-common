@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Contains view's decorators which automates common tasks.
+"""
+
 import traceback
 
 from django.shortcuts import render_to_response
@@ -8,10 +12,23 @@ from common.http import HttpResponseJson
 
 def render_to(template):
     """
-    Shortcut for rendering template with RequestContext.
+    Render view's output with ``template`` using ``RequestContext``.
 
-    If decorated function returns non dict then just return that result
-    else use RequestContext for rendering the template.
+    If decorated view returns dict object then wrap it in RequestContext and
+    render the template.
+
+    If decorated view returns non dict object then just return this object.
+
+    Args:
+        :template: path to template
+    
+    Example::
+
+        @render_to('blog/index.html')
+        def post_list(request):
+            posts = Post.objects.all()
+            return {'posts': posts,
+                    }
     """
 
     def decorator(func):
@@ -28,9 +45,13 @@ def render_to(template):
 
 def ajax(func):
     """
-    Wrap response of view into JSON format.
+    Convert views's output into JSON.
 
-    Checks request.method is POST. Return error in JSON in other case.
+    Decorated view should return dict object.
+
+    If ``request.method`` is not ``POST`` then deny the request.
+
+    If view raises Exception then return JSON message with error description.
     """
 
     def wrapper(request, *args, **kwargs):

@@ -21,7 +21,19 @@ class AutoOneToOneField(models.OneToOneField):
     OneToOneField creates dependent object on first request from parent object
     if dependent oject has not created yet.
 
-    Origin: http://softwaremaniacs.org/blog/2007/03/07/auto-one-to-one-field/
+    More info (in russian): http://softwaremaniacs.org/blog/2007/03/07/auto-one-to-one-field/
+
+    Usage example::
+
+        # in models.py
+        class Profile(models.Model):
+            user = AutoOneToOneField('auth.User')
+            icq = models.IntegerField()
+
+        # in some view
+        user = User.objects.create_user('batman', 'batman@gmail.com', 'Robin')
+        user.profile.icq = '827873948'
+        user.profile.save()
     """
 
     def contribute_to_related_class(self, cls, related):
@@ -31,6 +43,21 @@ class AutoOneToOneField(models.OneToOneField):
 
 
 class JSONField(models.TextField):
+    """
+    JSONField allows to store any data which is serialized in JSON under the hood.
+    
+    Usage example::
+
+        # in models.py
+        class Video(models.Model):
+            thumbnails = JSONField()
+
+        # in some view
+        obj = Video()
+        obj.thumbnails = ['1.jpg', '2.jpg']
+        obj.save()
+    """
+
     __metaclass__ = models.SubfieldBase
 
     def contribute_to_class(self, cls, name):

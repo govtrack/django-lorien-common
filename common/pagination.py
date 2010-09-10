@@ -1,9 +1,48 @@
+"""
+Django-common pagination module dramatically simplifies the pagination task.
+
+You only have to do following things.
+
+In view::
+
+    @render_to('foo_list.html')
+    def foo_list(request):
+        qs = Foo.objects.all()
+        page = paginate(qs, request)
+        return {'page': page,
+                }
+
+
+In template::
+
+    <ul>
+    {% for item in page.object_list %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+
+    {% include "pagination.html" %}
+
+If you want to know how this work under the hood please look at source code.
+"""
+
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 from common.templatetags.common_tags import alter_qs
 
 
 def paginate(qs, request, per_page=15, frame_size=10):
+    """
+    Return extended ``django.core.paginator.Page`` object
+
+    Args:
+
+        :qs: queryset which should be paginated
+        :request: django request object
+        :per_page: number of objects per page
+        :frame_size: number of visible pages (does not include first and large page)
+    """
+
     try:    
         page_number = int(request.GET.get('page', 1))
     except ValueError:
