@@ -67,3 +67,24 @@ def ajax(func):
         else:
             return response
     return wrapper
+
+
+def ajax_get(func):
+    """
+    Convert views's output into JSON.
+
+    Decorated view should return dict object.
+
+    If view raises Exception then return JSON message with error description.
+    """
+
+    def wrapper(request, *args, **kwargs):
+        try:
+            response = func(request, *args, **kwargs)
+        except Exception, ex:
+            response = {'error': traceback.format_exc()}
+        if isinstance(response, dict):
+            return HttpResponseJson(response)
+        else:
+            return response
+    return wrapper
