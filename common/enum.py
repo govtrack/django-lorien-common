@@ -22,6 +22,7 @@ class MetaList(type):
         for key, attr in attrs.items():
             if isinstance(attr, Item):
                 items[key] = attr
+                attr.slug = key
                 attrs[key] = attr.key
         new_cls = type.__new__(cls, name, bases, attrs)
         new_cls.items = items
@@ -51,6 +52,11 @@ class MetaList(type):
             setattr(cls, attrname, key)
         cls.items = items
 
+    def item_by_value(self, value):
+        return [x for x in self.items.itervalues() if x.key == value][0]
+
+    def get_by_slug(self, slug):
+        return self.items[slug].key
 
 
 class List(object):
@@ -58,7 +64,7 @@ class List(object):
 
     def __init__(self, choices=None):
         if choices is not None:
-            self.update_choices
+            self.update_choices(choices)
 
 
 def from_choices(choices):
