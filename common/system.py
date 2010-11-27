@@ -1,8 +1,8 @@
 import os
 import sys
 
-def setup_django(relpath=None):
-    ROOT = os.path.dirname(os.path.realpath(__file__))
+def setup_django(script_file, relpath=None):
+    ROOT = os.path.dirname(os.path.realpath(script_file))
     if relpath:
         ROOT = os.path.join(ROOT, relpath)
     os.chdir(ROOT)
