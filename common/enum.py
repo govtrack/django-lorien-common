@@ -1,91 +1,151 @@
 # -*- coding: utf-8 -*-
 """
-This module provides ``List`` class which simplifies work with enumerated list of choices.
+This module provides ``Enum`` class which simplifies work with enumerated list of choices.
 This implementation is specially developed for use in django models.
 """
 
 import re
+import random
 
-class Item(object):
-    def __init__(self, key=None, label=None):
-        self.key = key
-        self.label = key if label is None else label
+class Item(int):
+    def __new__(cls, value, label=None):
+        obj =  int.__new__(cls, value)
+        obj.value = value
+        if label is None:
+            obj.label = str(obj)
+        else:
+            obj.label = label
+        return obj
 
 
-class MetaList(type):
+def items_from_choices(choices):
     """
-    Find all enum.Item attributes and save them into ``items`` attribute.
+    Create dict of enum.Item objects from given values.
+    Args:
+        choices: dict (key->value) or list of pairs [(value, key), ...]
+    """
+
+    items = {}
+    if isinstance(choices, dict):
+        choices = [(y, x) for x, y in choices.items()]
+    for value, label in choices:
+        key = label.replace(' ', '_').replace('-', '_')
+        key = re.sub(r'_+', '_', key)
+        rex = re.compile(r'^[a-z0-9_]*$', re.I)
+        if not rex.match(key):
+            raise Exception('Could not create key from label: %s' % label)
+        items[key] = Item(value, label)
+    return items
+
+
+class MetaEnum(type):
+    """
+    Find all enum.Item attributes and save them into ``_items`` attribute.
     """
 
     def __new__(cls, name, bases, attrs):
         items = {}
+        if '_choices' in attrs:
+            attrs.update(items_from_choices(attrs['_choices']))
+            del attrs['_choices']
         for key, attr in attrs.items():
             if isinstance(attr, Item):
+                attr.key = key
                 items[key] = attr
-                attr.slug = key
-                attrs[key] = attr.key
-        new_cls = type.__new__(cls, name, bases, attrs)
-        new_cls.items = items
-        return new_cls
+                del attrs[key]
+        attrs['_items'] = items
+        return type.__new__(cls, name, bases, attrs)
 
-    def get_choices(cls):
-        return ((x.key, x.label) for x in cls.items.itervalues())
+    """
+    Public methods:
+    """
+
+    def by_value(cls, value):
+        """
+        Return enum.Item which has the given value.
+        """
+
+        return [x for x in cls.items.itervalues() if x.value == value][0]
+
+    def by_key(cls, key):
+        """
+        Return enum.Item which has the given key.
+        """
+
+        return cls._items[key]
 
     def __iter__(cls):
-        return iter(cls.get_choices())
+        """
+        Iterate over tuples of (value, label)
+        """
 
-    def update_choices(cls, choices):
-        for key in cls.items:
-            delattr(cls, key)
-        items = {}
-        for choice in choices:
-            if len(choice) == 3:
-                key, label, attrname = choice
-            else:
-                key, label = choice
+        return iter(cls.choices())
 
-                attrname = label.replace(' ', '_').replace('-', '_')
-                rex = re.compile(r'^[a-z][a-z0-9_]*$', re.I)
-                if not rex.match(attrname):
-                    raise Exception('Could not create attribute name from label: %s' % label)
-            items[attrname] = Item(key, label)
-            setattr(cls, attrname, key)
-        cls.items = items
+    def __len__(self):
+        """
+        Return the number of enum.Item objects.
+        """
 
-    def item_by_value(self, value):
-        return [x for x in self.items.itervalues() if x.key == value][0]
+        return len(self._items)
 
-    def get_by_slug(self, slug):
-        return self.items[slug].key
+    def choices(cls):
+        """
+        Return tuples of (value, label) for all enum.Item objects.
+        """
+
+        return [(x.value, x.label) for x in cls._items.itervalues()]
+
+    def values(self):
+        """
+        Return list of values of all enum.Item objects.
+        """
+
+        return self._items.values()
+
+    def random_value(cls):
+        """
+        Return random value of enum.Item object.
+        """
+
+        return random.choice(cls._items.values())
+
+    """
+    Private methods:
+    """
+
+    def __getattribute__(self, key):
+        """
+        Each enum.Item object could be accessed as enum.Enum instance's attribute.
+        """
+
+        items = type.__getattribute__(self, '_items')
+        if key in items:
+            return items[key]
+        else:
+            return type.__getattribute__(self, key)
 
 
-class List(object):
-    __metaclass__ = MetaList
-
-    def __init__(self, choices=None):
-        if choices is not None:
-            self.update_choices(choices)
+class Enum(object):
+    __metaclass__ = MetaEnum
 
 
-def from_choices(choices):
-    class _List(List):
-        pass
-    _List.update_choices(choices)
-    return _List
+def build(choices):
+    class _Enum(Enum):
+        _choices = choices
+    return _Enum
 
 
 if __name__ == '__main__':
     import sys
     enum = sys.modules['__main__']
-    class Body(enum.List):
+    class Body(enum.Enum):
         sedan = enum.Item(1, u'Sedan')
         hatchback = enum.Item(2, u'Hatchback')
 
     assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
     assert Body.sedan == 1
 
-    Body = enum.from_choices(((1, u'Sedan'), (2, u'Hatchback'), (3, u'Уаз', 'Uaz')))
-    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback'), (3, u'Уаз')])
-    assert Body.Uaz == 3
+    Body = enum.build(((1, u'Sedan'), (2, u'Hatchback')))
+    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
 
     print 'Done'
