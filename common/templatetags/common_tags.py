@@ -15,7 +15,7 @@ def alter_qs(qs, name, value, name2=None, value2=None):
     """
 
     qs = qs.lstrip('?')
-    args = [[x[0], smart_str(x[1])] for x in parse_qsl(qs)]
+    args = [[x[0], smart_str(x[1])] for x in parse_qsl(qs, keep_blank_values=True)]
     if value:
         found = False
         for arg in args:

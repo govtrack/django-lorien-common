@@ -148,4 +148,12 @@ if __name__ == '__main__':
     Body = enum.build(((1, u'Sedan'), (2, u'Hatchback')))
     assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
 
+    class Body(enum.Enum):
+        _choices = ((1, u'Sedan'), (2, u'Hatchback'))
+    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
+
+    class Body(enum.Enum):
+        _choices = dict(Sedan=1, Hatchback=2)
+    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
+
     print 'Done'
