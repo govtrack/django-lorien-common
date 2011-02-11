@@ -2,6 +2,40 @@
 """
 This module provides ``Enum`` class which simplifies work with enumerated list of choices.
 This implementation is specially developed for use in django models.
+
+Example of usage::
+
+    from common import enum
+
+    class Color(enum.Enum):
+        red = enum.Item(1)
+        green = enum.Item(2, 'So greeeen')
+
+
+We defined here two items. They are accessable as ``Color.red`` and ``Color.green``.
+``Color.red`` will give you ``1``. So ``Color.red == 1`` is ``True``.
+
+First item (``Color.red``) has the label same to its key i.e., "red". Second item (``Color.green``) has the custom label.  Labels are used when Color object are queried for the (key, label) pairs. This happens, for example, when we use Color object as the value for the ``choices`` argument of django field::
+
+    class Fruit(models.Model):
+        color = models.IntegerField(choices=Color, default=Color.red)
+
+We can use Color object as ``choices`` argument because ``enum.Enum`` class provides custom __iter__
+method which returs (key, label) pairs.
+
+Also keep in mind that ``Color.red`` is not simple integer. It is like integer but has
+some extra methods. Look example:
+
+    Color.green == 2
+    Color.green.label == "So greeeen"
+    Color.green.key == "green"
+
+Other useful methods of enum.Enum class::
+
+   Color.by_value(1) == Color.red
+   Color.by_key("red") == Color.red
+   Color.values == [Color.red, Color.green]
+   Color.random_value() == "Random value choosed from Color items"
 """
 
 import re

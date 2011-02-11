@@ -45,3 +45,12 @@ Model Fields
 .. autoclass:: AutoOneToOneField()
 
 .. autoclass:: JSONField()
+
+Enum
+====
+
+.. automodule:: common.enum
+
+.. autoclass:: AutoOneToOneField()
+
+.. autoclass:: JSONField()
