@@ -45,6 +45,9 @@ class MetaEnum(type):
 
     def __new__(cls, name, bases, attrs):
         items = {}
+        for base in bases:
+            if isinstance(base, MetaEnum):
+                items.update(base._items)
         if '_choices' in attrs:
             attrs.update(items_from_choices(attrs['_choices']))
             del attrs['_choices']
@@ -65,7 +68,7 @@ class MetaEnum(type):
         Return enum.Item which has the given value.
         """
 
-        return [x for x in cls.items.itervalues() if x.value == value][0]
+        return [x for x in cls._items.itervalues() if x.value == value][0]
 
     def by_key(cls, key):
         """
@@ -155,5 +158,7 @@ if __name__ == '__main__':
     class Body(enum.Enum):
         _choices = dict(Sedan=1, Hatchback=2)
     assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
+
+    assert Body.by_value(1).key == 'Sedan'
 
     print 'Done'

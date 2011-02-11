@@ -1,6 +1,7 @@
 import time
 from random import randint
 from hashlib import sha1
+from tempfile import NamedTemporaryFile
 import os
 import Image
 import ImageDraw
@@ -27,7 +28,8 @@ def generate_image(size):
 def random_image(size=(200, 200)):
     source = '%d%d' % (time.time(), id({}))
     hashname = sha1(source).hexdigest() + '.jpg'
-    tmpname = os.tmpnam()
+    tmpfile = NamedTemporaryFile()
     img = generate_image(size)
-    img.save(tmpname, 'JPEG')
-    return File(open(tmpname), name=hashname)
+    img.save(tmpfile, 'JPEG')
+    tmpfile.seek(0)
+    return File(open(tmpfile), name=hashname)
