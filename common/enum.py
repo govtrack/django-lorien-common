@@ -41,7 +41,7 @@ Other useful methods of enum.Enum class::
 import re
 import random
 
-class Item(int):
+class IntItem(int):
     def __new__(cls, value, label=None):
         obj =  int.__new__(cls, value)
         obj.value = value
@@ -50,6 +50,24 @@ class Item(int):
         else:
             obj.label = label
         return obj
+
+
+class StrItem(str):
+    def __new__(cls, value, label=None):
+        obj =  str.__new__(cls, value)
+        obj.value = value
+        if label is None:
+            obj.label = str(obj)
+        else:
+            obj.label = label
+        return obj
+
+
+def Item(value, *args, **kwargs):
+    if isinstance(value, int):
+        return IntItem(value, *args, **kwargs)
+    else:
+        return StrItem(value, *args, **kwargs)
 
 
 def items_from_choices(choices):
@@ -86,7 +104,7 @@ class MetaEnum(type):
             attrs.update(items_from_choices(attrs['_choices']))
             del attrs['_choices']
         for key, attr in attrs.items():
-            if isinstance(attr, Item):
+            if isinstance(attr, (IntItem, StrItem)):
                 attr.key = key
                 items[key] = attr
                 del attrs[key]
