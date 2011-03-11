@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
         VERSION:     '0.1.34',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="django-common v0.1.34 documentation" href="#" /> 
   </head>
@@ -29,8 +32,8 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="#">django-common v0.1.34 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -52,7 +55,7 @@ the development with django.</p>
 </ul>
 </div>
 <div class="section" id="module-common.decorators">
-<h2>Decorators<a class="headerlink" href="#module-common.decorators" title="Permalink to this headline">¶</a></h2>
+<span id="decorators"></span><h2>Decorators<a class="headerlink" href="#module-common.decorators" title="Permalink to this headline">¶</a></h2>
 <p>Contains view&#8217;s decorators which automates common tasks.</p>
 <dl class="function">
 <dt id="common.decorators.render_to">
@@ -94,7 +97,7 @@ render the template.</p>
 
 </div>
 <div class="section" id="module-common.pagination">
-<h2>Pagination<a class="headerlink" href="#module-common.pagination" title="Permalink to this headline">¶</a></h2>
+<span id="pagination"></span><h2>Pagination<a class="headerlink" href="#module-common.pagination" title="Permalink to this headline">¶</a></h2>
 <p>Django-common pagination module dramatically simplifies the pagination task.</p>
 <p>You only have to do following things.</p>
 <p>In view:</p>
@@ -141,7 +144,7 @@ render the template.</p>
 
 </div>
 <div class="section" id="module-common.forms">
-<h2>Forms<a class="headerlink" href="#module-common.forms" title="Permalink to this headline">¶</a></h2>
+<span id="forms"></span><h2>Forms<a class="headerlink" href="#module-common.forms" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="common.forms.build_form">
 <tt class="descclassname">common.forms.</tt><tt class="descname">build_form</tt><big>(</big><em>Form</em>, <em>_request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#common.forms.build_form" title="Permalink to this definition">¶</a></dt>
@@ -196,7 +199,7 @@ render the template.</p>
 
 </div>
 <div class="section" id="module-common.fields">
-<h2>Model Fields<a class="headerlink" href="#module-common.fields" title="Permalink to this headline">¶</a></h2>
+<span id="model-fields"></span><h2>Model Fields<a class="headerlink" href="#module-common.fields" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="common.fields.AutoOneToOneField">
 <em class="property">class </em><tt class="descclassname">common.fields.</tt><tt class="descname">AutoOneToOneField</tt><a class="headerlink" href="#common.fields.AutoOneToOneField" title="Permalink to this definition">¶</a></dt>
@@ -236,7 +239,7 @@ if dependent oject has not created yet.</p>
 
 </div>
 <div class="section" id="module-common.enum">
-<h2>Enum<a class="headerlink" href="#module-common.enum" title="Permalink to this headline">¶</a></h2>
+<span id="enum"></span><h2>Enum<a class="headerlink" href="#module-common.enum" title="Permalink to this headline">¶</a></h2>
 <p>This module provides <tt class="docutils literal"><span class="pre">Enum</span></tt> class which simplifies work with enumerated list of choices.
 This implementation is specially developed for use in django models.</p>
 <p>Example of usage:</p>
@@ -278,37 +281,37 @@ Color.green.key == &#8220;green&#8221;</blockquote>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="#">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">django-common</a><ul>
-<li><a class="reference external" href="#installation">Installation</a></li>
-<li><a class="reference external" href="#module-common.decorators">Decorators</a></li>
-<li><a class="reference external" href="#module-common.pagination">Pagination</a></li>
-<li><a class="reference external" href="#module-common.forms">Forms</a></li>
-<li><a class="reference external" href="#module-common.fields">Model Fields</a></li>
-<li><a class="reference external" href="#module-common.enum">Enum</a></li>
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">django-common</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#module-common.decorators">Decorators</a></li>
+<li><a class="reference internal" href="#module-common.pagination">Pagination</a></li>
+<li><a class="reference internal" href="#module-common.forms">Forms</a></li>
+<li><a class="reference internal" href="#module-common.fields">Model Fields</a></li>
+<li><a class="reference internal" href="#module-common.enum">Enum</a></li>
 </ul>
 </li>
 </ul>
 
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/index.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -320,14 +323,14 @@ Color.green.key == &#8220;green&#8221;</blockquote>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="#">django-common v0.1.34 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Grigoriy Petukhov.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+        &copy; Copyright 2010, Grigoriy Petukhov.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
     </div>
   </body>
 </html>
