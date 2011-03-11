@@ -1,5 +1,3 @@
-from django.db import models
-
 def iterate(qs, step=5000):
     """
     Reduce memory usage by splitting query into a number of queries using offset, limit
