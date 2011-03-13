@@ -5,6 +5,13 @@ from django.conf import settings
 from django.forms.widgets import Textarea
 from django.utils import simplejson
 
+try:
+    from south.modelsinspector import add_introspection_rules
+except ImportError:
+    pass
+else:
+    add_introspection_rules([], ['^common\.fields\.JSONField'])
+
 
 class AutoSingleRelatedObjectDescriptor(SingleRelatedObjectDescriptor):
     def __get__(self, instance, instance_type=None):
