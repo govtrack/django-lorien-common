@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if page.paginator.num_pages > 1 %}
 <div class="pagination">
     {% if page.has_previous %}
     <a href="{{ alterpath }}{{ page.previous_page_url }}">&laquo; {% trans "previous" %}</a>
@@ -33,5 +34,5 @@
     {% endif %}
 
     <div class="clear"></div>
-
 </div>
+{% endif %}
