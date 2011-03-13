@@ -4,3 +4,4 @@ syntax: glob
 *.egg-info/
 dist/
 update_pypi.sh
+docs/_build
