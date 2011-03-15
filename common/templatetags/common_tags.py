@@ -1,4 +1,12 @@
 # -*- coding: utf-8
+"""
+Template tags:
+ * alter_qs - allows to modify arguement in URL query string
+ * set - allows to set new variable in template
+
+Credits:
+ * code for `set` tag is based on http://djangosnippets.org/snippets/215/
+"""
 from cgi import parse_qsl
 from urllib import urlencode
 
@@ -12,6 +20,13 @@ register = template.Library()
 def alter_qs(qs, name, value, name2=None, value2=None):
     """
     Alter query string argument with new value.
+
+    Usage in template:
+        <a href="/foo/bar{% alter_qs request.META.QUERY_STRING "page" 3 %}">Some link</a>
+
+    Usage in code:
+        from common.templatetags.common_tags import alter_qs
+        url = alter_qs(some_url, "page", "4")
     """
 
     qs = qs.lstrip('?')
@@ -34,4 +49,39 @@ def alter_qs(qs, name, value, name2=None, value2=None):
         else:
             return result
     else:
+        return ''
+
+
+
+@register.tag(name='set')
+def do_set_varable(parser,token):
+    """
+    Set new value in the context of template.
+
+    Usage:
+        {% set category_list category.categories.all %}
+        {% set dir_url "../" %}
+        {% set type_list "table" %}
+        {% include "category_list.html" %}
+    """
+    from re import split
+    bits = split(r'\s+', token.contents, 2)
+    return SetVariableNode(bits[1],bits[2])
+
+
+class SetVariableNode(template.Node):
+    """
+    Template Node of `set` tag.
+    """
+
+    def __init__(self,varname,value):
+        self.varname = varname
+        self.value = value
+    
+    def render(self,context):
+        var = template.resolve_variable(self.value,context)
+        if var:
+            context[self.varname] = var
+        else:
+            context[self.varname] = context[self.value]
         return ''
