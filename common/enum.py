@@ -36,30 +36,74 @@ Other useful methods of enum.Enum class::
    Color.by_key("red") == Color.red
    Color.values == [Color.red, Color.green]
    Color.random_value() == "Random value choosed from Color items"
+
+Some tests:
+
+# Common usage of enum module
+>>> class Body(Enum):
+...     sedan = Item(1, u'Sedan')
+...     hatchback = Item(2, u'Hatchback')
+>>> set(Body)
+set([(1, u'Sedan'), (2, u'Hatchback')])
+>>> Body.sedan
+1
+
+# Build Enum class from list of tuples
+>>> Body = build(((1, u'Sedan'), (2, u'Hatchback')))
+>>> set(Body)
+set([(1, u'Sedan'), (2, u'Hatchback')])
+
+# Specify items with ``_choices`` attribute
+>>> class Body(Enum):
+...     _choices = ((1, u'Sedan'), (2, u'Hatchback'))
+>>> set(Body)
+set([(1, u'Sedan'), (2, u'Hatchback')])
+
+# ``_choices`` also could be a dict instance
+>>> class Body(Enum):
+...     _choices = dict(Sedan=1, Hatchback=2)
+>>> set(Body)
+set([(1, 'Sedan'), (2, 'Hatchback')])
+
+# Get enum Item by its value
+>>> Body.by_value(1).key
+'Sedan'
+
+# Pass arbitrary data to items
+>>> class Color(Enum):
+...     red = Item(1, 'Red', example='Apple')
+...     green = Item(2, 'Green', example='Tree')
+>>> Color.green.example
+'Tree'
 """
+
 import re
 from random import choice
 
+class NotFound(Exception):
+    "Raise when could not found item with specified parameters"
+
+def setup_item(obj, value, label, **kwargs):
+    obj.value = value
+    if label is None:
+        obj.label = str(obj)
+    else:
+        obj.label = label
+    for ikey, ivalue in kwargs.iteritems():
+        setattr(obj, ikey, ivalue)
+    return obj
+
+
 class IntItem(int):
-    def __new__(cls, value, label=None):
+    def __new__(cls, value, label=None, **kwargs):
         obj =  int.__new__(cls, value)
-        obj.value = value
-        if label is None:
-            obj.label = str(obj)
-        else:
-            obj.label = label
-        return obj
+        return setup_item(obj, value, label, **kwargs)
 
 
 class StrItem(str):
-    def __new__(cls, value, label=None):
+    def __new__(cls, value, label=None, **kwargs):
         obj =  str.__new__(cls, value)
-        obj.value = value
-        if label is None:
-            obj.label = str(obj)
-        else:
-            obj.label = label
-        return obj
+        return setup_item(obj, value, label, **kwargs)
 
 
 def Item(value, *args, **kwargs):
@@ -114,20 +158,6 @@ class MetaEnum(type):
     Public methods:
     """
 
-    def by_value(cls, value):
-        """
-        Return enum.Item which has the given value.
-        """
-
-        return [x for x in cls._items.itervalues() if x.value == value][0]
-
-    def by_key(cls, key):
-        """
-        Return enum.Item which has the given key.
-        """
-
-        return cls._items[key]
-
     def __iter__(cls):
         """
         Iterate over tuples of (value, label)
@@ -176,7 +206,29 @@ class MetaEnum(type):
         if key in items:
             return items[key]
         else:
-            return type.__getattribute__(self, key)
+            if key.startswith('by_'):
+                return type.__getattribute__(self, '_by_attribute')(key[3:])
+            else:
+                return type.__getattribute__(self, key)
+
+    def _by_attribute(cls, attr):
+        def func(value):
+            """
+            Return enum.Item which has attribute with specified value.
+            """
+            for x in cls._items.itervalues():
+                if getattr(x, attr) == value:
+                    return x
+            raise NotFound('Could not found item which %s attribute is %s' % (attr, value))
+        return func
+
+    def by_key(cls, key):
+        """
+        Return enum.Item which has the given key.
+        """
+
+        return cls._items[key]
+
 
 
 class Enum(object):
@@ -190,26 +242,5 @@ def build(choices):
 
 
 if __name__ == '__main__':
-    import sys
-    enum = sys.modules['__main__']
-    class Body(enum.Enum):
-        sedan = enum.Item(1, u'Sedan')
-        hatchback = enum.Item(2, u'Hatchback')
-
-    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
-    assert Body.sedan == 1
-
-    Body = enum.build(((1, u'Sedan'), (2, u'Hatchback')))
-    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
-
-    class Body(enum.Enum):
-        _choices = ((1, u'Sedan'), (2, u'Hatchback'))
-    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
-
-    class Body(enum.Enum):
-        _choices = dict(Sedan=1, Hatchback=2)
-    assert set(Body) == set([(1, u'Sedan'), (2, u'Hatchback')])
-
-    assert Body.by_value(1).key == 'Sedan'
-
-    print 'Done'
+    import doctest
+    doctest.testmod()
