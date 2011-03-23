@@ -37,9 +37,8 @@ Other useful methods of enum.Enum class::
    Color.values == [Color.red, Color.green]
    Color.random_value() == "Random value choosed from Color items"
 """
-
 import re
-import random
+from random import choice
 
 class IntItem(int):
     def __new__(cls, value, label=None):
@@ -162,7 +161,7 @@ class MetaEnum(type):
         Return random value of enum.Item object.
         """
 
-        return random.choice(cls._items.values())
+        return choice(cls._items.values())
 
     """
     Private methods:

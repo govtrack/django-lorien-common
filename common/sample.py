@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import string
 from random import choice, randint
 import itertools
@@ -56,5 +54,3 @@ def random_phone():
     def number(size):
         return ''.join(choice(string.digits) for x in xrange(size))
     return '+%s %s %s' % (number(1), number(3), number(7))
-
-
