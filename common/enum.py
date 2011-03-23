@@ -232,6 +232,7 @@ class MetaEnum(type):
 
 
 class Enum(object):
+    NotFound = NotFound
     __metaclass__ = MetaEnum
 
 
