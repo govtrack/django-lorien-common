@@ -3,7 +3,7 @@ import os
 from setuptools import setup
 
 PACKAGE = 'common'
-VERSION = '0.1.40'
+VERSION = '0.1.41'
 
 if __name__ == '__main__':
     # Compile the list of packages available, because distutils doesn't have

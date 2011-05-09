@@ -1,3 +1,9 @@
+"""
+Use this function at very start of your script
+which needs to work with django stuff.
+Use it as first as possible to correctly initialize logging settings
+(if you use django.settings.LOGGING feature)
+"""
 import os
 import sys
 
@@ -8,3 +14,10 @@ def setup_django(script_file, relpath=None):
     os.chdir(ROOT)
     sys.path.append(ROOT)
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+    from django.conf import settings
+
+    # Force django.conf.settings calculation
+    # This is required to initialize logging with settings
+    # from django.conf.settings.LOGGING
+    hasattr(settings, 'foo')
