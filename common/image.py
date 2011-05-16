@@ -12,9 +12,10 @@ def random_color():
     return 'rgb(%d, %d, %d)' % (randint(0, 255), randint(0, 255), randint(0, 255))
 
 
-def generate_image(size):
+def generate_image(size, bgcolor='#000000'):
     img = Image.new('RGBA', size=size)
     draw = ImageDraw.Draw(img)
+    draw.rectangle(((0, 0), size), fill=bgcolor)
     for x in xrange(30):
         diameter = int(min(*size) / float(randint(4, 8)))
         topleft = (0 + randint(0, size[0]),
@@ -25,11 +26,11 @@ def generate_image(size):
     return img
 
 
-def random_image(size=(200, 200)):
+def random_image(size=(200, 200), bgcolor='#000000'):
     source = '%d%d' % (time.time(), id({}))
     hashname = sha1(source).hexdigest() + '.jpg'
     tmpfile = NamedTemporaryFile()
-    img = generate_image(size)
+    img = generate_image(size, bgcolor)
     img.save(tmpfile, 'JPEG')
     tmpfile.seek(0)
     return File(tmpfile, name=hashname)
