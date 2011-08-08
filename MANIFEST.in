@@ -1,2 +1,2 @@
-recursive-include common *
-global-exclude *.pyc
+recursive-include common/templates *.html *.txt
+recursive-include common/data *
