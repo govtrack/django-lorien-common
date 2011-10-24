@@ -12,7 +12,7 @@ def setup_django(script_file, relpath=None, module='settings'):
     if relpath:
         ROOT = os.path.join(ROOT, relpath)
     os.chdir(ROOT)
-    sys.path.append(ROOT)
+    sys.path.insert(0, ROOT)
     os.environ['DJANGO_SETTINGS_MODULE'] = module
 
     from django.conf import settings
