@@ -88,3 +88,13 @@ def ajax_get(func):
         else:
             return response
     return wrapper
+
+
+def disable_cache(func):
+    def decorated(*args, **kwargs):
+        resp = func(*args, **kwargs)
+        resp['Pragma'] = 'no-cache'
+        resp['Expires'] = '0'
+        resp['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        return resp
+    return decorated
