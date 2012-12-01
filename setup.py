@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name = 'django-common',
     description = 'A number of useful django shortcuts and helpers',
-    version = '0.1.49',
+    version = '0.1.50',
     author = 'Grigoriy Petukhov',
     author_email = 'lorien@lorien.name',
     url = 'http://bitbucket.org/lorien/django-common/',
