@@ -1,17 +1,11 @@
-from urlparse import urlsplit
+# coding: utf-8
+from django.shortcuts import redirect
+from django.contrib import messages
 
-from django.conf import settings
-from django.views.static import serve
-
-PREFIX = urlsplit(settings.MEDIA_URL).path
-
-class StaticFilesMiddleware(object):
-    """
-    Django middleware for serving static files instead of using urls.py
-    """
-
+class UnderConstructionMiddleware(object):
     def process_request(self, request):
-        if settings.DEBUG:
-            if request.path.startswith(PREFIX):
-                path = request.path[len(PREFIX):]
-                return serve(request, path, settings.MEDIA_ROOT)
+        if request.method == 'POST':
+            messages.error(request, u'Извините. Сайт переезжает на другой сервер. Все изменения данных временно запрещены')
+            return redirect(request.get_full_path())
+        else:
+            return None
