@@ -3,7 +3,8 @@ from django.db.models.fields.related import SingleRelatedObjectDescriptor
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
 from django.forms.widgets import Textarea
-from django.utils import simplejson
+
+import json
 
 try:
     from south.modelsinspector import add_introspection_rules
@@ -83,14 +84,14 @@ class JSONField(models.TextField):
         return super(JSONField, self).formfield(**kwargs)
 
     def get_db_prep_value(self, value):
-        return simplejson.dumps(value)
+        return json.dumps(value)
 
     def to_python(self, value):
         if not isinstance(value, basestring):
             return value
 
         try:
-            return simplejson.loads(value, encoding=settings.DEFAULT_CHARSET)
+            return json.loads(value, encoding=settings.DEFAULT_CHARSET)
         except ValueError, e:
             # If string could not parse as JSON it's means that it's Python
             # string saved to JSONField.
@@ -110,5 +111,5 @@ class JSONWidget(Textarea):
     """
     def render(self, name, value, attrs=None):
         if not isinstance(value, basestring) and value is not None:
-            value = simplejson.dumps(value, indent=4, sort_keys=True)
+            value = json.dumps(value, indent=4, sort_keys=True)
         return super(JSONWidget, self).render(name, value, attrs)
