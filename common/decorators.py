@@ -5,8 +5,7 @@ Contains view's decorators which automates common tasks.
 
 import traceback
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from common.http import HttpResponseJson
 
@@ -14,8 +13,7 @@ def render_to(template):
     """
     Render view's output with ``template`` using ``RequestContext``.
 
-    If decorated view returns dict object then wrap it in RequestContext and
-    render the template.
+    If decorated view returns dict object then render the template.
 
     If decorated view returns non dict object then just return this object.
 
@@ -37,8 +35,7 @@ def render_to(template):
             if not isinstance(output, dict):
                 return output
             else:
-                ctx = RequestContext(request)
-                return render_to_response(template, output, context_instance=ctx)
+                return render(request, template, output)
         return wrapper
     return decorator
 
